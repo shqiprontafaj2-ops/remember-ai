@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remember AI - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 22px;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+        h3 {
+            color: #444;
+            margin-top: 25px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Welcome, <span id="userEmailDisplay" style="color: #007bff;"></span></h2>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Seksioni i Provimeve -->
+    <h3>Schedule an Exam</h3>
+    <form id="examForm" onsubmit="handleExam(event)">
+        <div class="form-group">
+            <label for="examTitle">Exam Title:</label>
+            <input type="text" id="examTitle" placeholder="e.g., Mathematics Final" required>
+        </div>
+        <div class="form-group">
+            <label for="examDate">Exam Date & Time:</label>
+            <input type="datetime-local" id="examDate" required>
+        </div>
+        <button type="submit" class="btn-submit">Save Exam</button>
+    </form>
+
+    <hr>
+
+    <!-- Seksioni i Takimeve -->
+    <h3>Schedule a Meeting</h3>
+    <form id="meetingForm" onsubmit="handleMeeting(event)">
+        <div class="form-group">
+            <label for="meetingTitle">Meeting Title:</label>
+            <input type="text" id="meetingTitle" placeholder="e.g., Project Sync" required>
+        </div>
+        <div class="form-group">
+            <label for="meetingDate">Meeting Date & Time:</label>
+            <input type="datetime-local" id="meetingDate" required>
+        </div>
+        <button type="submit" class="btn-submit">Save Meeting</button>
+    </form>
+</div>
+
+<script>
+    // Kontrollo nëse përdoruesi është i kyçur përmes LocalStorage
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+        // Nëse nuk është i kyçur, ktheje te faqja e login-it
+        window.location.href = 'login.html';
+    } else {
+        // Shfaq email-in e përdoruesit në kokë të faqes
+        document.getElementById('userEmailDisplay').textContent = userEmail;
+    }
+
+    // Funksioni për Logout
+    function logout() {
+        localStorage.removeItem('userEmail');
+        window.location.href = 'login.html';
+    }
+
+    // Trajtimi i dërgimit të Provimit
+    async function handleExam(event) {
+        event.preventDefault();
+        const title = document.getElementById('examTitle').value;
+        const examDate = document.getElementById('examDate').value;
+
+        try {
+            const response = await fetch('http://localhost:5000/api/exams', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userEmail, title, examDate })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('Exam saved successfully and notification scheduled!');
+                document.getElementById('examForm').reset();
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            alert('Failed to connect to the server.');
+        }
+    }
+
+    // Trajtimi i dërgimit të Takimit
+    async function handleMeeting(event) {
+        event.preventDefault();
+        const title = document.getElementById('meetingTitle' ).value;
+        const meetingDate = document.getElementById('meetingDate').value;
+
+        try {
+            const response = await fetch('http://localhost:5000/api/meetings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userEmail, title, meetingDate })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('Meeting saved successfully and notification scheduled!');
+                document.getElementById('meetingForm').reset();
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            alert('Failed to connect to the server.');
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remember AI - Login</title>
+    <!-- FontAwesome për ikonën e syrit -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .password-container {
+            position: relative;
+        }
+        .password-container i {
+            position: absolute;
+            right: 12px;
+            top: 52%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+        }
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Login to Remember AI</h2>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+
+        <label for="password">Password:</label>
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <i class="fa-solid fa-eye" id="togglePassword" onclick="toggleVis('password', 'togglePassword')"></i>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+    <div class="link">
+        Don't have an account? <a href="signup.html">Sign Up</a>
+    </div>
+</div>
+
+<script>
+    // Funksioni për të shfaqur/fshehur fjalëkalimin
+    function toggleVis(fieldId, iconId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
+        if (field.type === "password") {
+            field.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            field.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+
+    async function handleLogin(event) {
+        event.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Login successful! Redirecting to dashboard...');
+                // Ruajmë email-in në localStorage që të dihet se kush është kyçur
+                localStorage.setItem('userEmail', email);
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Error: ' + (data.error || 'Login failed'));
+            }
+        } catch (err) {
+            console.error('Network error:', err);
+            alert('Failed to connect to the server.');
+        }
+    }
+</script>
+
+</body>
+</html>

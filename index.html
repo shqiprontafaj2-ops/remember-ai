@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remember AI - Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2575fc;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .btn-translate, .btn-login {
+            padding: 8px 16px;
+            border: 1px solid #2575fc;
+            background: transparent;
+            color: #2575fc;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-login {
+            background: #2575fc;
+            color: #fff;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #111;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+        }
+        .btn-get-started {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #2575fc;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(37, 117, 252, 0.3);
+        }
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 50px 20px;
+            background: #fff;
+        }
+        .feature-card {
+            background: #f9fbff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Remember AI</div>
+        <div class="nav-links">
+            <button class="btn-translate" onclick="alert('Translation feature coming soon!')">See Translation</button>
+            <a href="/login" class="btn-login">Sign In</a>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Your Intelligent Memory Assistant</h1>
+        <p>Remember AI helps you organize notes, tasks, and memories seamlessly using advanced artificial intelligence.</p>
+        <a href="/signup" class="btn-get-started">Get Started</a>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <h3>Smart Organization</h3>
+            <p>Automatically categorize and retrieve your daily notes and important reminders instantly.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Secure Storage</h3>
+            <p>Your personal data is encrypted and stored safely with robust database protection.</p>
+        </div>
+        <div class="feature-card">
+            <h3>AI-Powered Insights</h3>
+            <p>Get intelligent summaries and suggestions tailored specifically to your workflow.</p>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remember AI - Sign Up</title>
+    <!-- Libraritë për kërkimin e shteteve, prefikseve dhe ikonat -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .row > div {
+            flex: 1;
+        }
+        .phone-group {
+            display: flex;
+            gap: 5px;
+        }
+        .phone-group .choices {
+            flex: 0 0 130px;
+            margin-top: 5px;
+            margin-bottom: 0;
+        }
+        .phone-group input {
+            flex: 1;
+        }
+        .password-container {
+            position: relative;
+        }
+        .password-container i {
+            position: absolute;
+            right: 12px;
+            top: 52%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+        }
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Create Account</h2>
+    <form id="signupForm" onsubmit="handleSignup(event)">
+        
+        <div class="row">
+            <div>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" placeholder="John" required>
+            </div>
+            <div>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" placeholder="Doe" required>
+            </div>
+        </div>
+
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" placeholder="john.doe@example.com" required>
+
+        <label for="country">Country:</label>
+        <select id="country" required>
+            <option value="">Select your country</option>
+        </select>
+
+        <label for="phone">Phone Number:</label>
+        <div class="phone-group">
+            <select id="phoneCode" required>
+                <option value="">Code</option>
+            </select>
+            <input type="tel" id="phone" placeholder="44 123 456" required>
+        </div>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" required>
+
+        <label for="password">Password:</label>
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Enter password" required>
+            <i class="fa-solid fa-eye" id="togglePassword" onclick="toggleVis('password', 'togglePassword')"></i>
+        </div>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <div class="password-container">
+            <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+            <i class="fa-solid fa-eye" id="toggleConfirm" onclick="toggleVis('confirmPassword', 'toggleConfirm')"></i>
+        </div>
+
+        <button type="submit">Sign Up</button>
+    </form>
+    
+    <div class="link">
+        Already have an account? <a href="login.html">Login</a>
+    </div>
+</div>
+
+<!-- Libraria e jashtme për kërkimin te select -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const countrySelect = document.getElementById('country');
+        const phoneCodeSelect = document.getElementById('phoneCode');
+        
+        let phoneChoicesInstance;
+
+        // Marrim të gjitha shtetet e botës automatikisht përmes API-së publike
+        fetch('https://restcountries.com/v3.1/independent?status=true&fields=name,cca2,idd')
+            .then(res => res.json())
+            .then(data => {
+                // Përpunojmë dhe renditim shtetet sipas alfabetit
+                data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+                
+                let phoneOptionsHTML = '<option value="">Code</option>';
+
+                data.forEach(country => {
+                    // Mbushja e listës së shteteve
+                    const option = document.createElement('option');
+                    option.value = country.name.common;
+                    option.textContent = country.name.common;
+                    countrySelect.appendChild(option);
+
+                    // Përpunimi i prefikseve telefonike për secilin shtet
+                    if (country.idd && country.idd.root) {
+                        const root = country.idd.root; // p.sh. +3
+                        const suffixes = country.idd.suffixes; // p.sh. [83]
+                        
+                        if (suffixes && suffixes.length > 0) {
+                            suffixes.forEach(suffix => {
+                                const fullCode = root + suffix;
+                                phoneOptionsHTML += `<option value="${fullCode}">${fullCode} (${country.name.common})</option>`;
+                            });
+                        } else {
+                            phoneOptionsHTML += `<option value="${root}">${root} (${country.name.common})</option>`;
+                        }
+                    }
+                });
+
+                // Shtoem prefikset te select-i i telefonit
+                phoneCodeSelect.innerHTML = phoneOptionsHTML;
+
+                // Aktivizimi i kërkimit (Search) për shtetet
+                new Choices(countrySelect, {
+                    searchEnabled: true,
+                    itemSelectText: '',
+                });
+
+                // Aktivizimi i kërkimit edhe për prefikset e telefonit të gjithë botës
+                phoneChoicesInstance = new Choices(phoneCodeSelect, {
+                    searchEnabled: true,
+                    itemSelectText: '',
+                });
+            })
+            .catch(err => console.log('Gabim në ngarkimin e shteteve:', err));
+    });
+
+    // Funksioni për të shfaqur/fshehur fjalëkalimin me ikonën e syrit
+    function toggleVis(fieldId, iconId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
+        if (field.type === "password") {
+            field.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            field.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+
+    async function handleSignup(event) {
+        event.preventDefault();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+
+        alert('Formulari u plotësua me sukses për të gjithë botën! Tani do ta lidhim me backend-in.');
+    }
+</script>
+
+</body>
+</html>
