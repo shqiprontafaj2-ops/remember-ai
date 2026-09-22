@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* Sfondi i gjithë faqes */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    /* Këtu është sfondi i bukur gradient */
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+/* Kutia e Login/Signup */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1e3c72;
+    font-weight: 600;
+}
+
+/* Fushat e input-it */
+.input-field {
+    margin-bottom: 20px;
+}
+
+.input-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #444;
+}
+
+.input-field input, 
+.input-field select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.input-field input:focus,
+.input-field select:focus {
+    border-color: #2a5298;
+    outline: none;
+    box-shadow: 0 0 5px rgba(42, 82, 152, 0.3);
+}
+
+/* Butoni i dërgimit */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #2a5298;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: #1e3c72;
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* Linku poshtë formës */
+p a {
+    color: #2a5298;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
