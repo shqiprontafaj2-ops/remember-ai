@@ -9,15 +9,35 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Konfigurimi për të shërbyer skedarët statikë (HTML, CSS, JS) nga i njëjti folder
+// Konfigurimi për të shërbyer skedarët statikë
 app.use(express.static(__dirname));
 
-// Rruga kryesore (hapet index.html kur viziton linkun e Render)
+// Rruget për secilën faqe HTML
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-// Lidhja me Neon DB duke përdorur DATABASE_URL nga .env ose Render
+app.get('/signup', (req, res) => {
+  res.sendFile(__dirname + '/signup.html');
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/login.html');
+});
+
+app.get('/forgot-password', (req, res) => {
+  res.sendFile(__dirname + '/forgot-password.html');
+});
+
+app.get('/reset-password', (req, res) => {
+  res.sendFile(__dirname + '/reset-password.html');
+});
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile(__dirname + '/dashboard.html');
+});
+
+// Lidhja me Neon DB
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
@@ -37,16 +57,13 @@ app.post('/api/signup', async (req, res) => {
   try {
     const { first_name, last_name, email, country, phone, dob, password } = req.body;
     
-    // Kontrollo nëse email-i ekziston tashmë
     const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ success: false, message: 'Email already registered!' });
     }
 
-    // Enkriptimi i fjalëkalimit
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Ruajtja në bazën e të dhënave duke përdorur kolonat e sakta
     await pool.query(
       `INSERT INTO users (first_name, last_name, email, country, phone, dob, password) 
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
@@ -60,7 +77,7 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// 2. FORGOT PASSWORD (Krijimi dhe dërgimi i kodit)
+// 2. FORGOT PASSWORD
 app.post('/api/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
@@ -70,17 +87,14 @@ app.post('/api/forgot-password', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Email not found in our records!' });
     }
 
-    // Gjenero një kod 6-shifror
     const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // Skadon pas 15 minutash
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
 
-    // Ruaj kodin dhe skadencën në bazën e të dhënave
     await pool.query(
       'UPDATE users SET reset_code = $1, reset_expires = $2 WHERE email = $3',
       [resetCode, expiresAt, email]
     );
 
-    // Dërgo email-in përmes Gmail SMTP
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: email,
@@ -93,7 +107,7 @@ app.post('/api/forgot-password', async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: 'Failed to send email. Please check server email credentials configuration.' });
+    res.status(500).json({ success: false, message: 'Failed to send email.' });
   }
 });
 
