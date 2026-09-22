@@ -4,94 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remember AI - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        .dashboard-container {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 35px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            margin: 20px auto;
+            color: #f8fafc;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 20px;
             margin-bottom: 25px;
         }
         .header h2 {
             margin: 0;
-            color: #333;
-            font-size: 22px;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .header h2 span {
+            color: #38bdf8;
         }
         .btn-logout {
-            background-color: #dc3545;
+            background-color: #ef4444;
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 13px;
+            transition: background 0.3s;
         }
         .btn-logout:hover {
-            background-color: #c82333;
+            background-color: #dc2626;
         }
         h3 {
-            color: #444;
+            color: #e2e8f0;
             margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         label {
             display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #555;
-            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #94a3b8;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 11px 14px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: inherit;
             font-size: 14px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #38bdf8;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
         .btn-submit {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 12px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
             width: 100%;
             margin-top: 5px;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+            transition: all 0.3s ease;
         }
         .btn-submit:hover {
-            background-color: #0056b3;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+            transform: translateY(-1px);
         }
         hr {
             border: 0;
-            border-top: 1px solid #eee;
-            margin: 30px 0;
+            border-top: 1px solid #334155;
+            margin: 25px 0;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="dashboard-container">
     <div class="header">
-        <h2>Welcome, <span id="userEmailDisplay" style="color: #007bff;"></span></h2>
+        <h2>Welcome, <span id="userEmailDisplay"></span></h2>
         <button class="btn-logout" onclick="logout()">Logout</button>
     </div>
 
@@ -99,11 +122,11 @@
     <h3>Schedule an Exam</h3>
     <form id="examForm" onsubmit="handleExam(event)">
         <div class="form-group">
-            <label for="examTitle">Exam Title:</label>
+            <label for="examTitle">Exam Title</label>
             <input type="text" id="examTitle" placeholder="e.g., Mathematics Final" required>
         </div>
         <div class="form-group">
-            <label for="examDate">Exam Date & Time:</label>
+            <label for="examDate">Exam Date & Time</label>
             <input type="datetime-local" id="examDate" required>
         </div>
         <button type="submit" class="btn-submit">Save Exam</button>
@@ -115,11 +138,11 @@
     <h3>Schedule a Meeting</h3>
     <form id="meetingForm" onsubmit="handleMeeting(event)">
         <div class="form-group">
-            <label for="meetingTitle">Meeting Title:</label>
+            <label for="meetingTitle">Meeting Title</label>
             <input type="text" id="meetingTitle" placeholder="e.g., Project Sync" required>
         </div>
         <div class="form-group">
-            <label for="meetingDate">Meeting Date & Time:</label>
+            <label for="meetingDate">Meeting Date & Time</label>
             <input type="datetime-local" id="meetingDate" required>
         </div>
         <button type="submit" class="btn-submit">Save Meeting</button>
@@ -127,37 +150,31 @@
 </div>
 
 <script>
-    // Kontrollo nëse përdoruesi është i kyçur përmes LocalStorage
     const userEmail = localStorage.getItem('userEmail');
     if (!userEmail) {
-        // Nëse nuk është i kyçur, ktheje te faqja e login-it
-        window.location.href = 'login.html';
+        window.location.href = '/login';
     } else {
-        // Shfaq email-in e përdoruesit në kokë të faqes
         document.getElementById('userEmailDisplay').textContent = userEmail;
     }
 
-    // Funksioni për Logout
     function logout() {
         localStorage.removeItem('userEmail');
-        window.location.href = 'login.html';
+        window.location.href = '/login';
     }
 
-    // Trajtimi i dërgimit të Provimit
     async function handleExam(event) {
         event.preventDefault();
         const title = document.getElementById('examTitle').value;
         const examDate = document.getElementById('examDate').value;
 
         try {
-            const response = await fetch('http://localhost:5000/api/exams', {
+            const response = await fetch('/api/exams', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userEmail, title, examDate })
             });
 
             const result = await response.json();
-
             if (response.ok) {
                 alert('Exam saved successfully and notification scheduled!');
                 document.getElementById('examForm').reset();
@@ -170,21 +187,19 @@
         }
     }
 
-    // Trajtimi i dërgimit të Takimit
     async function handleMeeting(event) {
         event.preventDefault();
-        const title = document.getElementById('meetingTitle' ).value;
+        const title = document.getElementById('meetingTitle').value;
         const meetingDate = document.getElementById('meetingDate').value;
 
         try {
-            const response = await fetch('http://localhost:5000/api/meetings', {
+            const response = await fetch('/api/meetings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userEmail, title, meetingDate })
             });
 
             const result = await response.json();
-
             if (response.ok) {
                 alert('Meeting saved successfully and notification scheduled!');
                 document.getElementById('meetingForm').reset();
