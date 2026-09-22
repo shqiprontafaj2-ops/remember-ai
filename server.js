@@ -463,7 +463,7 @@ app.get('/', (req, res) => {
                     const data = await res.json();
                     
                     msgDiv.className = data.success ? "message success" : "message error";
-                    msgDiv.innerText = data.message;
+                    msgDiv.innerText = data.message || data.error || "An error occurred.";
                     if(data.success) {
                         setTimeout(() => switchTab('login'), 2000);
                     }
@@ -489,7 +489,7 @@ app.get('/', (req, res) => {
                     const data = await res.json();
                     
                     msgDiv.className = data.success ? "message success" : "message error";
-                    msgDiv.innerText = data.message;
+                    msgDiv.innerText = data.message || data.error || "An error occurred.";
                 } catch (err) {
                     msgDiv.className = "message error";
                     msgDiv.innerText = "An error occurred. Please try again.";
@@ -526,7 +526,7 @@ app.post('/register', async (req, res) => {
     });
   } catch (err) {
     if (err.code === '23505') {
-      return res.status(400).json({ success: false, message: 'This email is already registered!' });
+      return res.status(400).json({ success: false, error: 'This email is already registered!' });
     }
     res.status(500).json({ success: false, error: err.message });
   }
@@ -546,14 +546,14 @@ app.post('/login', async (req, res) => {
     const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     
     if (userResult.rows.length === 0) {
-      return res.status(400).json({ success: false, message: 'Invalid email or password!' });
+      return res.status(400).json({ success: false, error: 'Invalid email or password!' });
     }
 
     const user = userResult.rows[0];
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(400).json({ success: false, message: 'Invalid email or password!' });
+      return res.status(400).json({ success: false, error: 'Invalid email or password!' });
     }
 
     res.json({
@@ -568,5 +568,5 @@ app.post('/login', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
