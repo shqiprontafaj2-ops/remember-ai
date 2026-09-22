@@ -6,44 +6,142 @@
     <title>Remember AI - Sign Up</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Përshtatje shtesë për kutitë e regjistrimit që të duken pastër */
-        .login-container {
-            max-width: 480px;
+        .signup-container {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             margin: 20px auto;
         }
-        .form-row {
-            display: flex;
-            gap: 15px;
+        .signup-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
         }
-        .form-row .input-field {
-            flex: 1;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #38bdf8;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+        }
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .password-wrapper input {
+            padding-right: 50px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .toggle-password:hover {
+            color: #38bdf8;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+            transform: translateY(-1px);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        .login-link a {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <h2>Create Account</h2>
+    <div class="signup-container">
+        <h2>Create Your Account</h2>
         
         <form id="signupForm">
-            <div class="form-row">
-                <div class="input-field">
+            <div class="form-grid">
+                <!-- Emri dhe Mbiemri -->
+                <div class="form-group">
                     <label for="first_name">First Name</label>
-                    <input type="text" id="first_name" name="first_name" placeholder="John" required>
+                    <input type="text" id="first_name" name="first_name" placeholder="Shqipron" required>
                 </div>
-                <div class="input-field">
+                <div class="form-group">
                     <label for="last_name">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
+                    <input type="text" id="last_name" name="last_name" placeholder="Tafaj" required>
                 </div>
-            </div>
 
-            <div class="input-field">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="name@example.com" required>
-            </div>
+                <!-- Email -->
+                <div class="form-group full-width">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="name@example.com" required>
+                </div>
 
-            <div class="form-row">
-                <div class="input-field">
+                <!-- Shteti -->
+                <div class="form-group">
                     <label for="country">Country</label>
                     <select id="country" name="country" required>
                         <option value="" disabled selected>Select country</option>
@@ -63,48 +161,57 @@
                         <option value="Norway">Norway (+47)</option>
                         <option value="Belgium">Belgium (+32)</option>
                         <option value="Netherlands">Netherlands (+31)</option>
-                        <!-- Mund të shtosh shtete të tjera sipas dëshirës -->
                     </select>
                 </div>
-                <div class="input-field">
+
+                <!-- Telefoni -->
+                <div class="form-group">
                     <label for="phone">Phone Number</label>
                     <input type="text" id="phone" name="phone" placeholder="+383 44 123 456" required>
                 </div>
-            </div>
 
-            <div class="input-field">
-                <label for="dob">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required>
-            </div>
+                <!-- Datëlindja -->
+                <div class="form-group full-width">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
 
-            <div class="input-field">
-                <label for="password">Password</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
-                    <button type="button" class="toggle-password" onclick="togglePassword()">Show</button>
+                <!-- Fjalëkalimi -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="••••••••" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password', this)">Show</button>
+                    </div>
+                </div>
+
+                <!-- Konfirmimi i Fjalëkalimit -->
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('confirm_password', this)">Show</button>
+                    </div>
                 </div>
             </div>
 
             <button type="submit" class="btn-submit">Sign Up</button>
             
-            <p>
+            <div class="login-link">
                 Already have an account? <a href="/login">Sign In</a>
-            </p>
+            </div>
         </form>
     </div>
 
     <script>
-        // Funksioni për të shfaqur/fshehur fjalëkalimin
-        function togglePassword() {
-            const passwordInput = document.getElementById("password");
-            const toggleBtn = document.querySelector(".toggle-password");
-            
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                toggleBtn.textContent = "Hide";
+        function togglePassword(fieldId, btn) {
+            const inputField = document.getElementById(fieldId);
+            if (inputField.type === "password") {
+                inputField.type = "text";
+                btn.textContent = "Hide";
             } else {
-                passwordInput.type = "password";
-                toggleBtn.textContent = "Show";
+                inputField.type = "password";
+                btn.textContent = "Show";
             }
         }
 
@@ -114,13 +221,20 @@
                 signupForm.addEventListener("submit", async function(e) {
                     e.preventDefault();
                     
+                    const password = document.getElementById("password").value;
+                    const confirmPassword = document.getElementById("confirm_password").value;
+
+                    if (password !== confirmPassword) {
+                        alert("Fjalëkalimet nuk përputhen!");
+                        return;
+                    }
+
                     const first_name = document.getElementById("first_name").value;
                     const last_name = document.getElementById("last_name").value;
                     const email = document.getElementById("email").value;
                     const country = document.getElementById("country").value;
                     const phone = document.getElementById("phone").value;
                     const dob = document.getElementById("dob").value;
-                    const password = document.getElementById("password").value;
 
                     try {
                         const response = await fetch('/api/signup', {
