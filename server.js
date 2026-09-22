@@ -39,7 +39,7 @@ async function createTables() {
 createTables();
 
 // -----------------------------------------------------------------
-// FRONTEND: DARK MODE PROFESSIONAL UI (Global Country Search & Phone)
+// FRONTEND: DARK MODE PROFESSIONAL UI WITH 4 KEY FEATURES & AUTO-DETECT
 // -----------------------------------------------------------------
 app.get('/', (req, res) => {
   res.send(`
@@ -78,7 +78,7 @@ app.get('/', (req, res) => {
             }
             .top-bar {
                 width: 100%;
-                max-width: 600px;
+                max-width: 520px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -99,8 +99,36 @@ app.get('/', (req, res) => {
                 box-sizing: border-box;
             }
             h1 { color: #818cf8; margin-top: 0; margin-bottom: 5px; text-align: center; font-size: 1.8em; }
-            p.subtitle { color: var(--text-muted); font-size: 0.95em; text-align: center; margin-bottom: 25px; }
+            p.subtitle { color: var(--text-muted); font-size: 0.95em; text-align: center; margin-bottom: 20px; }
             
+            /* 4 Key Features Box */
+            .features-box {
+                background: rgba(31, 41, 55, 0.6);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                padding: 15px;
+                margin-bottom: 25px;
+                text-align: left;
+            }
+            .features-box h3 {
+                color: #818cf8;
+                font-size: 0.95em;
+                margin-top: 0;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            .features-box ul {
+                margin: 0;
+                padding-left: 20px;
+                font-size: 0.85em;
+                color: var(--text-muted);
+                line-height: 1.6;
+            }
+            .features-box li strong {
+                color: var(--text-color);
+            }
+
             .tabs {
                 display: flex;
                 margin-bottom: 25px;
@@ -217,12 +245,24 @@ app.get('/', (req, res) => {
 
         <div class="top-bar">
             <div id="live-date"></div>
+            <div id="user-lang">🌍 Auto-detect</div>
             <div id="live-clock"></div>
         </div>
 
         <div class="container">
             <h1>Remember AI</h1>
             <p class="subtitle">Global Intelligence & Secure Cloud Storage</p>
+
+            <!-- 4 KEY FEATURES BOX -->
+            <div class="features-box">
+                <h3>Platform Core Features:</h3>
+                <ul>
+                    <li>✨ <strong>Smart Memory AI:</strong> Advanced processing to store and retrieve your data instantly.</li>
+                    <li>🌍 <strong>Global Multi-User:</strong> Secure cloud access from any country and device worldwide.</li>
+                    <li>🔒 <strong>Bank-Grade Security:</strong> Encrypted credentials and robust PostgreSQL database protection.</li>
+                    <li>⚡ <strong>Real-Time Sync:</strong> Lightning-fast synchronization across all your active sessions.</li>
+                </ul>
+            </div>
 
             <div class="tabs">
                 <div class="tab active" id="tab-register" onclick="switchTab('register')">Register</div>
@@ -329,6 +369,10 @@ app.get('/', (req, res) => {
         </div>
 
         <script>
+            // Detect user language/device locale
+            const userLang = navigator.language || navigator.userLanguage;
+            document.getElementById('user-lang').innerText = "🌐 " + userLang.toUpperCase();
+
             // Live Date and Clock Script
             function updateDateTime() {
                 const now = new Date();
@@ -362,7 +406,6 @@ app.get('/', (req, res) => {
                     const txt = options[i].text.toLowerCase();
                     options[i].style.display = txt.includes(query) ? "" : "none";
                 }
-                // Auto select first visible option if query matches
                 for (let i = 0; i < options.length; i++) {
                     if (options[i].style.display !== "none") {
                         select.selectedIndex = i;
@@ -525,5 +568,5 @@ app.post('/login', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${port}`);
 });
