@@ -9,10 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Konfigurimi për të shërbyer skedarët statikë (HTML, CSS, JS)
 app.use(express.static(__dirname));
 
-// Rrugët për secilën faqe HTML
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
@@ -37,13 +35,11 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(__dirname + '/dashboard.html');
 });
 
-// Lidhja me Neon DB
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
 
-// Konfigurimi i Nodemailer për Gmail SMTP
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -52,7 +48,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// 1. REGJISTRIMI (SIGNUP)
 app.post('/api/signup', async (req, res) => {
   try {
     const { first_name, last_name, email, country, phone, dob, password } = req.body;
@@ -77,7 +72,6 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// 2. HYRJA (LOGIN)
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -101,7 +95,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// 3. FORGOT PASSWORD
 app.post('/api/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
@@ -129,7 +122,7 @@ app.post('/api/forgot-password', async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.json({ success: true, message: 'Reset code sent to email successfully!' });
 
-  } gjatë (err) {
+  } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to send email.' });
   }
