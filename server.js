@@ -8,7 +8,15 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static('public')); // Nëse ke skedarë frontend në public, ose hiqe nëse i ke jashtë
+
+// Konfigurimi për të lexuar skedarët frontend (HTML, CSS, JS) nga e njëjta vatër ose folder
+app.use(express.static(__dirname)); 
+// Ose nëse i ke brenda një folderi public, përdor: app.use(express.static('public'));
+
+// Rruga kryesore (hapet kur viziton linkun e Render)
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/signup.html'); // Ndryshoje nëse skedari yt kryesor ka emër tjetër
+});
 
 // Lidhja me Neon DB duke përdorur DATABASE_URL nga .env ose Render
 const pool = new Pool({
