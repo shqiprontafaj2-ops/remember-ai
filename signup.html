@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remember AI - Create Account</title>
-    <!-- Lidhja me skedarin tuaj të stilit (përshtateni emrin nëse është i ndryshëm, p.sh. style.css) -->
+    <!-- Lidhja me skedarin tuaj të stilit -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -33,6 +33,31 @@
                 <label for="country">Country:</label>
                 <select name="country" id="country" required>
                     <option value="">Select your country</option>
+                    <option value="Afghanistan">Afghanistan</option>
+                    <option value="Albania">Albania</option>
+                    <option value="Algeria">Algeria</option>
+                    <option value="Andorra">Andorra</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Armenia">Armenia</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Austria">Austria</option>
+                    <option value="Belgium">Belgium</option>
+                    <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="Bulgaria">Bulgaria</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Croatia">Croatia</option>
+                    <option value="France">France</option>
+                    <option value="Germany">Germany</option>
+                    <option value="Greece">Greece</option>
+                    <option value="Italy">Italy</option>
+                    <option value="Kosovo">Kosovo</option>
+                    <option value="Montenegro">Montenegro</option>
+                    <option value="North Macedonia">North Macedonia</option>
+                    <option value="Switzerland">Switzerland</option>
+                    <option value="Turkey">Turkey</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="United States">United States</option>
                 </select>
             </div>
 
@@ -60,29 +85,9 @@
         </form>
     </div>
 
-    <!-- Skripti për të mbushur automatikisht të gjitha shtetet e botës dhe për të dërguar të dhënat në backend -->
+    <!-- Skripti për dërgimin e të dhënave të formularit në backend -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const countrySelect = document.getElementById("country");
-            
-            // Mbushja automatike e shteteve
-            if (countrySelect) {
-                fetch("https://restcountries.com/v3.1/all?fields=name")
-                    .then(response => response.json())
-                    .then(data => {
-                        data.sort((a, b) => a.name.common.localeCompare(b.name.common));
-                        
-                        data.forEach(country => {
-                            const option = document.createElement("option");
-                            option.value = country.name.common;
-                            option.textContent = country.name.common;
-                            countrySelect.appendChild(option);
-                        });
-                    })
-                    .catch(error => console.error("Gabim në marrjen e shteteve:", error));
-            }
-
-            // Trajtimi i dërgimit të formularit në backend
             const signupForm = document.getElementById("signupForm");
             if (signupForm) {
                 signupForm.addEventListener("submit", async function(e) {
