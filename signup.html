@@ -3,131 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remember AI - Create Account</title>
-    <!-- Lidhja me skedarin tuaj të stilit -->
+    <title>Remember AI - Sign Up</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Përshtatje shtesë për kutitë e regjistrimit që të duken pastër */
+        .login-container {
+            max-width: 480px;
+            margin: 20px auto;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        .form-row .input-field {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="signup-container">
+    <div class="login-container">
         <h2>Create Account</h2>
         
         <form id="signupForm">
-            <div class="name-group">
+            <div class="form-row">
                 <div class="input-field">
-                    <label for="first_name">First Name:</label>
-                    <input type="text" id="first_name" name="first_name" required>
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" placeholder="John" required>
                 </div>
                 <div class="input-field">
-                    <label for="last_name">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name" required>
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
                 </div>
             </div>
 
             <div class="input-field">
-                <label for="email">Email Address:</label>
-                <input type="email" id="email" name="email" required>
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-row">
+                <div class="input-field">
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required>
+                        <option value="" disabled selected>Select country</option>
+                        <option value="Kosovo">Kosovo (+383)</option>
+                        <option value="Albania">Albania (+355)</option>
+                        <option value="Germany">Germany (+49)</option>
+                        <option value="Switzerland">Switzerland (+41)</option>
+                        <option value="United States">United States (+1)</option>
+                        <option value="United Kingdom">United Kingdom (+44)</option>
+                        <option value="Italy">Italy (+39)</option>
+                        <option value="France">France (+33)</option>
+                        <option value="Austria">Austria (+43)</option>
+                        <option value="Turkey">Turkey (+90)</option>
+                        <option value="Canada">Canada (+1)</option>
+                        <option value="Australia">Australia (+61)</option>
+                        <option value="Sweden">Sweden (+46)</option>
+                        <option value="Norway">Norway (+47)</option>
+                        <option value="Belgium">Belgium (+32)</option>
+                        <option value="Netherlands">Netherlands (+31)</option>
+                        <!-- Mund të shtosh shtete të tjera sipas dëshirës -->
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" placeholder="+383 44 123 456" required>
+                </div>
             </div>
 
             <div class="input-field">
-                <label for="country">Country:</label>
-                <select name="country" id="country" required>
-                    <option value="">Select your country</option>
-                    <option value="Afghanistan">Afghanistan</option>
-                    <option value="Albania">Albania</option>
-                    <option value="Algeria">Algeria</option>
-                    <option value="Andorra">Andorra</option>
-                    <option value="Argentina">Argentina</option>
-                    <option value="Armenia">Armenia</option>
-                    <option value="Australia">Australia</option>
-                    <option value="Austria">Austria</option>
-                    <option value="Belgium">Belgium</option>
-                    <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
-                    <option value="Brazil">Brazil</option>
-                    <option value="Bulgaria">Bulgaria</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Croatia">Croatia</option>
-                    <option value="France">France</option>
-                    <option value="Germany">Germany</option>
-                    <option value="Greece">Greece</option>
-                    <option value="Italy">Italy</option>
-                    <option value="Kosovo">Kosovo</option>
-                    <option value="Montenegro">Montenegro</option>
-                    <option value="North Macedonia">North Macedonia</option>
-                    <option value="Switzerland">Switzerland</option>
-                    <option value="Turkey">Turkey</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="United States">United States</option>
-                </select>
-            </div>
-
-            <div class="input-field">
-                <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" name="phone">
-            </div>
-
-            <div class="input-field">
-                <label for="dob">Date of Birth:</label>
+                <label for="dob">Date of Birth</label>
                 <input type="date" id="dob" name="dob" required>
             </div>
 
             <div class="input-field">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <div class="input-field">
-                <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
+                <label for="password">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword()">Show</button>
+                </div>
             </div>
 
             <button type="submit" class="btn-submit">Sign Up</button>
+            
+            <p>
+                Already have an account? <a href="/login">Sign In</a>
+            </p>
         </form>
     </div>
 
-    <!-- Skripti për dërgimin e të dhënave të formularit në backend -->
     <script>
+        // Funksioni për të shfaqur/fshehur fjalëkalimin
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            const toggleBtn = document.querySelector(".toggle-password");
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleBtn.textContent = "Hide";
+            } else {
+                passwordInput.type = "password";
+                toggleBtn.textContent = "Show";
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             const signupForm = document.getElementById("signupForm");
             if (signupForm) {
                 signupForm.addEventListener("submit", async function(e) {
                     e.preventDefault();
                     
+                    const first_name = document.getElementById("first_name").value;
+                    const last_name = document.getElementById("last_name").value;
+                    const email = document.getElementById("email").value;
+                    const country = document.getElementById("country").value;
+                    const phone = document.getElementById("phone").value;
+                    const dob = document.getElementById("dob").value;
                     const password = document.getElementById("password").value;
-                    const confirmPassword = document.getElementById("confirm_password").value;
-
-                    if (password !== confirmPassword) {
-                        alert("Fjalëkalimet nuk përputhen!");
-                        return;
-                    }
-
-                    const formData = {
-                        first_name: document.getElementById("first_name").value,
-                        last_name: document.getElementById("last_name").value,
-                        email: document.getElementById("email").value,
-                        country: document.getElementById("country").value,
-                        phone: document.getElementById("phone").value,
-                        dob: document.getElementById("dob").value,
-                        password: password
-                    };
 
                     try {
                         const response = await fetch('/api/signup', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(formData)
+                            body: JSON.stringify({ first_name, last_name, email, country, phone, dob, password })
                         });
 
                         const result = await response.json();
-                        if (result.success) {
-                            alert("U regjistruat me sukses!");
-                            window.location.href = '/login.html';
+                        if (response.ok && result.success) {
+                            alert("Regjistrimi u krye me sukses! Ju lutem kyçuni.");
+                            window.location.href = '/login';
                         } else {
-                            alert("Gabim: " + result.message);
+                            alert("Gabim: " + (result.message || "Regjistrimi dështoi."));
                         }
                     } catch (err) {
                         console.error("Gabim në rrjet:", err);
-                        alert("Ndodhi një gabim gjatë regjistrimit.");
+                        alert("Failed to connect to the server.");
                     }
                 });
             }
