@@ -9,10 +9,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Konfigurimi për të shërbyer skedarët statikë
+// Konfigurimi për të shërbyer skedarët statikë (HTML, CSS, JS)
 app.use(express.static(__dirname));
 
-// Rruget për secilën faqe HTML
+// Rrugët për secilën faqe HTML
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
