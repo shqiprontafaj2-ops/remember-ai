@@ -9,13 +9,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Konfigurimi për të lexuar skedarët frontend (HTML, CSS, JS) nga e njëjta vatër ose folder
-app.use(express.static(__dirname)); 
-// Ose nëse i ke brenda një folderi public, përdor: app.use(express.static('public'));
+// Konfigurimi për të shërbyer skedarët statikë (HTML, CSS, JS) nga i njëjti folder
+app.use(express.static(__dirname));
 
-// Rruga kryesore (hapet kur viziton linkun e Render)
+// Rruga kryesore (hapet index.html kur viziton linkun e Render)
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/signup.html'); // Ndryshoje nëse skedari yt kryesor ka emër tjetër
+  res.sendFile(__dirname + '/index.html');
 });
 
 // Lidhja me Neon DB duke përdorur DATABASE_URL nga .env ose Render
