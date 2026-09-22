@@ -4,8 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remember AI - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
     <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #0f172a;
+            background-image: radial-gradient(circle at 10% 20%, rgb(30, 41, 59) 0%, rgb(15, 23, 42) 90%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f8fafc;
+        }
         .dashboard-container {
             max-width: 750px;
             width: 100%;
@@ -16,7 +27,6 @@
             border-radius: 16px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             margin: 20px auto;
-            color: #f8fafc;
         }
         .header {
             display: flex;
@@ -49,8 +59,6 @@
         .btn-logout:hover {
             background-color: #dc2626;
         }
-        
-        /* Stili për 4 pikat kyçe */
         .features-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -74,7 +82,6 @@
             font-size: 12px;
             line-height: 1.4;
         }
-
         h3 {
             color: #e2e8f0;
             margin-top: 25px;
@@ -103,7 +110,6 @@
             color: #ffffff;
             font-family: inherit;
             font-size: 14px;
-            transition: all 0.3s ease;
             box-sizing: border-box;
         }
         input:focus {
@@ -123,11 +129,9 @@
             margin-top: 5px;
             font-size: 14px;
             box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
-            transition: all 0.3s ease;
         }
         .btn-submit:hover {
             background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
-            transform: translateY(-1px);
         }
         hr {
             border: 0;
@@ -166,7 +170,6 @@
 
     <hr>
 
-    <!-- Seksioni i Provimeve -->
     <h3>Schedule an Exam</h3>
     <form id="examForm" onsubmit="handleExam(event)">
         <div class="form-group">
@@ -182,7 +185,6 @@
 
     <hr>
 
-    <!-- Seksioni i Takimeve -->
     <h3>Schedule a Meeting</h3>
     <form id="meetingForm" onsubmit="handleMeeting(event)">
         <div class="form-group">
