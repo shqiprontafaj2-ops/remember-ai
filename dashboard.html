@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .dashboard-container {
-            max-width: 650px;
+            max-width: 750px;
             width: 100%;
             background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(12px);
@@ -49,6 +49,32 @@
         .btn-logout:hover {
             background-color: #dc2626;
         }
+        
+        /* Stili për 4 pikat kyçe */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .feature-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #334155;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .feature-card h4 {
+            color: #38bdf8;
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+        .feature-card p {
+            color: #94a3b8;
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
         h3 {
             color: #e2e8f0;
             margin-top: 25px;
@@ -117,6 +143,28 @@
         <h2>Welcome, <span id="userEmailDisplay"></span></h2>
         <button class="btn-logout" onclick="logout()">Logout</button>
     </div>
+
+    <!-- 4 Pikat Kyçe të Sistemit -->
+    <div class="features-grid">
+        <div class="feature-card">
+            <h4>1. Smart Scheduling</h4>
+            <p>Organize and track your academic exams and professional meetings seamlessly.</p>
+        </div>
+        <div class="feature-card">
+            <h4>2. Secure Backend</h4>
+            <p>Powered by Node.js, Express, and Neon PostgreSQL with Bcrypt password hashing.</p>
+        </div>
+        <div class="feature-card">
+            <h4>3. Automated Alerts</h4>
+            <p>Integrated notification scheduling and email dispatching via Nodemailer.</p>
+        </div>
+        <div class="feature-card">
+            <h4>4. Modern Interface</h4>
+            <p>Glassmorphism design aesthetic deployed live on Render infrastructure.</p>
+        </div>
+    </div>
+
+    <hr>
 
     <!-- Seksioni i Provimeve -->
     <h3>Schedule an Exam</h3>
@@ -214,4 +262,4 @@
 </script>
 
 </body>
-</html> .
+</html>
