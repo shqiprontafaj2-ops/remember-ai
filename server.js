@@ -77,7 +77,31 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// 2. FORGOT PASSWORD
+// 2. HYRJA (LOGIN)
+app.post('/api/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (userResult.rows.length === 0) {
+      return res.status(400).json({ success: false, message: 'Email ose fjalëkalimi i gabuar!' });
+    }
+
+    const user = userResult.rows[0];
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: 'Email ose fjalëkalimi i gabuar!' });
+    }
+
+    res.json({ success: true, message: 'Hyrja u realizua me sukses!' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Gabim në server.' });
+  }
+});
+
+// 3. FORGOT PASSWORD
 app.post('/api/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
@@ -105,7 +129,7 @@ app.post('/api/forgot-password', async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.json({ success: true, message: 'Reset code sent to email successfully!' });
 
-  } catch (err) {
+  } gjatë (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to send email.' });
   }
