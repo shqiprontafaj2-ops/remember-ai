@@ -48,6 +48,9 @@
 
                         const result = await response.json();
                         if (result.success) {
+                            // Ruaj email-in që dashboard-i të të njohë dhe të mos të kthejë te login-i
+                            localStorage.setItem('userEmail', email);
+                            
                             alert("Hyrja u realizua me sukses!");
                             window.location.href = '/dashboard';
                         } else {
