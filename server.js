@@ -1,6 +1,7 @@
 const express = require('express');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -15,7 +16,16 @@ const pool = new Pool({
   }
 });
 
-// Krijimi i tabelës 'users' me fushat e plota
+// Konfigurimi i Nodemailer për dërgimin e email-eve
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // Email-i yt (p.sh. gmail)
+    pass: process.env.EMAIL_PASS  // App Password nga Google Account
+  }
+});
+
+// Krijimi i tabelës 'users' dhe shtimi i fushave për resetimin e fjalëkalimit
 async function createTables() {
   try {
     await pool.query(`
@@ -27,10 +37,12 @@ async function createTables() {
         email VARCHAR(255) UNIQUE NOT NULL,
         dob DATE NOT NULL,
         password VARCHAR(255) NOT NULL,
+        reset_code VARCHAR(10),
+        reset_expires TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log('Users table with extended profile confirmed successfully!');
+    console.log('Users table with reset features confirmed successfully!');
   } catch (err) {
     console.error('Error creating table:', err);
   }
@@ -39,7 +51,7 @@ async function createTables() {
 createTables();
 
 // -----------------------------------------------------------------
-// FRONTEND: DARK MODE PROFESSIONAL UI WITH 4 KEY FEATURES & AUTO-DETECT
+// FRONTEND INTERFACE
 // -----------------------------------------------------------------
 app.get('/', (req, res) => {
   res.send(`
@@ -101,7 +113,6 @@ app.get('/', (req, res) => {
             h1 { color: #818cf8; margin-top: 0; margin-bottom: 5px; text-align: center; font-size: 1.8em; }
             p.subtitle { color: var(--text-muted); font-size: 0.95em; text-align: center; margin-bottom: 20px; }
             
-            /* 4 Key Features Box */
             .features-box {
                 background: rgba(31, 41, 55, 0.6);
                 border: 1px solid var(--border-color);
@@ -125,9 +136,7 @@ app.get('/', (req, res) => {
                 color: var(--text-muted);
                 line-height: 1.6;
             }
-            .features-box li strong {
-                color: var(--text-color);
-            }
+            .features-box li strong { color: var(--text-color); }
 
             .tabs {
                 display: flex;
@@ -171,24 +180,16 @@ app.get('/', (req, res) => {
                 outline: none;
                 transition: border-color 0.3s;
             }
-            input:focus, select:focus {
-                border-color: var(--primary);
-            }
+            input:focus, select:focus { border-color: var(--primary); }
             
             .phone-row {
                 display: flex;
                 gap: 10px;
             }
-            .phone-row select {
-                flex: 1.4;
-            }
-            .phone-row input {
-                flex: 2;
-            }
+            .phone-row select { flex: 1.4; }
+            .phone-row input { flex: 2; }
 
-            .password-container {
-                position: relative;
-            }
+            .password-container { position: relative; }
             .toggle-password {
                 position: absolute;
                 right: 12px;
@@ -253,7 +254,6 @@ app.get('/', (req, res) => {
             <h1>Remember AI</h1>
             <p class="subtitle">Global Intelligence & Secure Cloud Storage</p>
 
-            <!-- 4 KEY FEATURES BOX -->
             <div class="features-box">
                 <h3>Platform Core Features:</h3>
                 <ul>
@@ -369,11 +369,9 @@ app.get('/', (req, res) => {
         </div>
 
         <script>
-            // Detect user language/device locale
             const userLang = navigator.language || navigator.userLanguage;
             document.getElementById('user-lang').innerText = "🌐 " + userLang.toUpperCase();
 
-            // Live Date and Clock Script
             function updateDateTime() {
                 const now = new Date();
                 document.getElementById('live-date').innerText = now.toLocaleDateString('en-GB', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
@@ -382,7 +380,6 @@ app.get('/', (req, res) => {
             setInterval(updateDateTime, 1000);
             updateDateTime();
 
-            // Tab Switching
             function switchTab(tab) {
                 if(tab === 'register') {
                     document.getElementById('register-form').classList.remove('hidden');
@@ -397,7 +394,6 @@ app.get('/', (req, res) => {
                 }
             }
 
-            // Country Search / Filter Function
             function filterCountries() {
                 const query = document.getElementById('country-search').value.toLowerCase();
                 const select = document.getElementById('reg-country');
@@ -414,7 +410,6 @@ app.get('/', (req, res) => {
                 }
             }
 
-            // Toggle Password Visibility
             function togglePassword(fieldId, el) {
                 const input = document.getElementById(fieldId);
                 if (input.type === "password") {
@@ -426,15 +421,39 @@ app.get('/', (req, res) => {
                 }
             }
 
-            // Forgot Password Simulated Feature with Verification Code via Email
-            function forgotPassword() {
-                const email = prompt("Please enter your registered email address to receive a verification code:");
-                if (email) {
-                    alert("A 6-digit verification code has been successfully sent to " + email + ". Please check your inbox!");
+            // Real Forgot Password via Backend API Call
+            async function forgotPassword() {
+                const email = prompt("Please enter your registered email address to receive a 6-digit verification code:");
+                if (!email) return;
+
+                try {
+                    const res = await fetch('/forgot-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await res.json();
+                    if(data.success) {
+                        alert(data.message);
+                        const code = prompt("Enter the 6-digit code received in your email:");
+                        const newPassword = prompt("Enter your new password:");
+                        if (code && newPassword) {
+                            const resetRes = await fetch('/reset-password', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ email, code, newPassword })
+                            });
+                            const resetData = await resetRes.json();
+                            alert(resetData.message || resetData.error);
+                        }
+                    } else {
+                        alert(data.error || "Failed to send reset code.");
+                    }
+                } catch(err) {
+                    alert("An error occurred. Please try again.");
                 }
             }
 
-            // Register API Handler
             async function handleRegister(e) {
                 e.preventDefault();
                 const name = document.getElementById('reg-name').value;
@@ -473,7 +492,6 @@ app.get('/', (req, res) => {
                 }
             }
 
-            // Login API Handler
             async function handleLogin(e) {
                 e.preventDefault();
                 const email = document.getElementById('log-email').value;
@@ -513,7 +531,6 @@ app.post('/register', async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = await pool.query(
       'INSERT INTO users (name, surname, phone, email, dob, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, email, name',
       [name, surname, phone, email, dob, hashedPassword]
@@ -544,7 +561,6 @@ app.post('/login', async (req, res) => {
 
   try {
     const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    
     if (userResult.rows.length === 0) {
       return res.status(400).json({ success: false, error: 'Invalid email or password!' });
     }
@@ -562,6 +578,62 @@ app.post('/login', async (req, res) => {
       userId: user.id,
       email: user.email
     });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// -----------------------------------------------------------------
+// 3. FORGOT PASSWORD ENDPOINT (Sends Real Email Code)
+// -----------------------------------------------------------------
+app.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  try {
+    const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (userResult.rows.length === 0) {
+      return res.status(400).json({ success: false, error: 'Email not found in our records!' });
+    }
+
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expires = new Date(Date.now() + 15 * 60 * 1000); // 15 minuta kohëzgjatje
+
+    await pool.query('UPDATE users SET reset_code = $1, reset_expires = $2 WHERE email = $3', [code, expires, email]);
+
+    // Dërgimi i email-it
+    await transporter.sendMail({
+      from: '"Remember AI Support" <' + process.env.EMAIL_USER + '>',
+      to: email,
+      subject: 'Password Reset Verification Code - Remember AI',
+      text: `Your 6-digit verification code for password reset is: ${code}. It expires in 15 minutes.`
+    });
+
+    res.json({ success: true, message: `A 6-digit code has been successfully sent to ${email}.` });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Failed to send email. Please check server email credentials configuration.' });
+  }
+});
+
+// -----------------------------------------------------------------
+// 4. RESET PASSWORD ENDPOINT
+// -----------------------------------------------------------------
+app.post('/reset-password', async (req, res) => {
+  const { email, code, newPassword } = req.body;
+  try {
+    const userResult = await pool.query('SELECT * FROM users WHERE email = $1 AND reset_code = $2', [email, code]);
+    if (userResult.rows.length === 0) {
+      return res.status(400).json({ success: false, error: 'Invalid verification code!' });
+    }
+
+    const user = userResult.rows[0];
+    if (new Date() > new Date(user.reset_expires)) {
+      return res.status(400).json({ success: false, error: 'Verification code has expired!' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await pool.query('UPDATE users SET password = $1, reset_code = NULL, reset_expires = NULL WHERE email = $2', [hashedPassword, email]);
+
+    res.json({ success: true, message: 'Password has been reset successfully! You can now log in.' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
