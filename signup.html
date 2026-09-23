@@ -136,7 +136,7 @@
         
         <form id="signupForm">
             <div class="form-grid">
-                <!-- Kolonat e zbrazëta për emrin dhe mbiemrin -->
+                <!-- Emri dhe Mbiemri -->
                 <div class="form-group">
                     <label for="first_name">First Name</label>
                     <input type="text" id="first_name" name="first_name" placeholder="" autocomplete="given-name" required>
@@ -188,21 +188,12 @@
                     <input type="date" id="dob" name="dob" autocomplete="bday" required>
                 </div>
 
-                <!-- Fjalëkalimi -->
-                <div class="form-group">
+                <!-- Fjalëkalimi (E vetme, pa konfirmim) -->
+                <div class="form-group full-width">
                     <label for="password">Password</label>
                     <div class="password-wrapper">
                         <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="new-password" required>
                         <button type="button" class="toggle-password" onclick="togglePassword('password', this)">Show</button>
-                    </div>
-                </div>
-
-                <!-- Konfirmimi i Fjalëkalimit -->
-                <div class="form-group">
-                    <label for="confirm_password">Confirm Password</label>
-                    <div class="password-wrapper">
-                        <input type="password" id="confirm_password" name="confirm_password" placeholder="••••••••" autocomplete="new-password" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('confirm_password', this)">Show</button>
                     </div>
                 </div>
             </div>
@@ -233,20 +224,13 @@
                 signupForm.addEventListener("submit", async function(e) {
                     e.preventDefault();
                     
-                    const password = document.getElementById("password").value;
-                    const confirmPassword = document.getElementById("confirm_password").value;
-
-                    if (password !== confirmPassword) {
-                        alert("Fjalëkalimet nuk përputhen!");
-                        return;
-                    }
-
                     const first_name = document.getElementById("first_name").value;
                     const last_name = document.getElementById("last_name").value;
                     const email = document.getElementById("email").value;
                     const country = document.getElementById("country").value;
                     const phone = document.getElementById("phone").value;
                     const dob = document.getElementById("dob").value;
+                    const password = document.getElementById("password").value;
 
                     try {
                         const response = await fetch('/api/signup', {
